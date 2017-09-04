@@ -1,0 +1,168 @@
+<properties>
+              <java.version>1.8</java.version>
+       </properties>
+ 
+       <parent>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-starter-parent</artifactId>
+              <version>1.4.2.RELEASE</version>
+       </parent>
+ 
+       <dependencies>
+       
+              <!-- Spring MVC & REST, use Embedded Tomcat -->
+              <dependency>
+                     <groupId>org.springframework.boot</groupId>
+                     <artifactId>spring-boot-starter-web</artifactId>
+              </dependency>
+              
+              <dependency>
+                     <groupId>org.springframework.cloud</groupId>
+                     <artifactId>spring-cloud-starter-oauth2</artifactId>
+              </dependency>
+              <dependency>
+                     <groupId>org.springframework.cloud</groupId>
+                     <artifactId>spring-cloud-starter-security</artifactId>
+              </dependency>
+              
+              <!-- Spring - Devtools for refresh server -->
+              <dependency>
+                     <groupId>org.springframework.boot</groupId>
+                     <artifactId>spring-boot-devtools</artifactId>
+                     <optional>true</optional>
+              </dependency>
+ 
+              <!-- Logger -->
+              <dependency>
+                     <groupId>ch.qos.logback</groupId>
+                     <artifactId>logback-classic</artifactId>
+              </dependency>
+ 
+              <dependency>
+                     <groupId>ch.qos.logback</groupId>
+                     <artifactId>logback-core</artifactId>
+              </dependency>
+              <!-- Logger -->
+ 
+              <!-- Testing starter -->
+              <dependency>
+                     <groupId>org.springframework.boot</groupId>
+                     <artifactId>spring-boot-starter-test</artifactId>
+              </dependency>
+ 
+       </dependencies>
+ 
+       <build>
+              <plugins>
+                     <plugin>
+                           <groupId>org.springframework.boot</groupId>
+                           <artifactId>spring-boot-maven-plugin</artifactId>
+                     </plugin>
+              </plugins>
+       </build>
+    
+    <dependencyManagement>
+              <dependencies>
+                     <dependency>
+                           <groupId>org.springframework.cloud</groupId>
+                           <artifactId>spring-cloud-dependencies</artifactId>
+                           <version>Camden.RELEASE</version>
+                           <type>pom</type>
+                           <scope>import</scope>
+                     </dependency>
+              </dependencies>
+       </dependencyManagement> 
+
+	   
+	   
+	security:
+  oauth2:
+    client:
+      clientId: 54b645f5-2ef1-4dec-879c-e16ad4251cbe
+      clientSecret: esH8Fo9dBiuBRQEmTU9egfa
+      accessTokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token
+      userAuthorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+      scope: Mail.Read
+      clientAuthenticationScheme: form
+      registered-redirect-uri: http://localhost:8080
+      use-current-uri: false
+    resource:
+      userInfoUri: https://graph.microsoft.com/v1.0/me/
+      preferTokenInfo: false 
+
+
+	  
+	  
+@Configuration
+@EnableOAuth2Sso
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    
+    @Bean
+    public OAuth2RestTemplate oauth2RestTemplate(OAuth2ProtectedResourceDetails resource, OAuth2ClientContext context) {
+        return new OAuth2RestTemplate(resource, context);
+    }
+    
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        
+    }
+
+} 	  
+	   
+------------------------------------------------------------------------------------------------------------------------------
+
+public class Application {
+
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
+
+    public static void main(String args[]) {
+        RestTemplate restTemplate = new RestTemplate();
+        Quote quote = restTemplate.getForObject("http://gturnquist-quoters.cfapps.io/api/random", Quote.class);
+        log.info(quote.toString());
+    }
+
+}
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+https://spring.io/guides/gs/consuming-rest/
+
+https://spring.io/guides/gs/consuming-rest/
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+http://localhost:8282/api/mail
+
+auth url
+https://login.windows.net/common/oauth2/authorize?resource=https%3A%2F%2Fgraph.microsoft.com
+https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+
+Access Token URL
+https://login.windows.net/common/oauth2/token
+https://login.microsoftonline.com/common/oauth2/v2.0/token
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+https://apps.dev.microsoft.com/#/application/58eb56ea-495b-409e-9ee4-d02c7ad83c4f
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	   

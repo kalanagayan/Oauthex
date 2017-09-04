@@ -1,0 +1,17 @@
+server:
+  port: 8282
+security:
+  oauth2:
+    client:
+      clientId: 58eb56ea-495b-409e-9ee4-d02c7ad83c4f
+      clientSecret: UakJrSvLFWznjhooDmX8uLJ
+      accessTokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token
+      userAuthorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+      scope: Mail.Read
+      clientAuthenticationScheme: form
+      registered-redirect-uri: http://localhost:8282
+      use-current-uri: false
+    resource:
+      userInfoUri: https://graph.microsoft.com/v1.0/me/
+      preferTokenInfo: false 
+   
